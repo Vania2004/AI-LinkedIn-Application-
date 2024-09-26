@@ -102,10 +102,11 @@ class Linkedin:
                     countJobs += 1
 
                     jobProperties = self.getJobProperties(countJobs) 
-                    
+                    print("Will extract the easy apply button now")
                     button = self.easyApplyButton()
-
+                    print("Button is: ", button)
                     if button is not False:
+                        print("easy applllly")
                         button.click()
                         time.sleep(random.uniform(1, constants.botSpeed))
                         countApplied += 1
@@ -143,7 +144,8 @@ class Linkedin:
                                     lineToWrite = jobProperties + " | " + "* 🥵 Cannot apply to this Job! " +str(offerPage)
                                     self.displayWriteResults(lineToWrite)
                     else:
-                        lineToWrite = jobProperties + " | " + "* 🥳 Already applied! Job: " +str(offerPage)
+                        print("Button not found")
+                        lineToWrite = jobProperties + " | " + "* 🥵 Unable to apply! Job: " +str(offerPage)
                         self.displayWriteResults(lineToWrite)
 
 
@@ -162,32 +164,32 @@ class Linkedin:
         jobApplications = ""
 
         try:
-            jobTitle = self.driver.find_element(By.XPATH,"//h1[contains(@class, 'job-title')]").get_attribute("innerHTML").strip()
+            jobTitle = self.driver.find_element(By.XPATH,"//h1[contains(@class, 't-24 t-bold inline')]").get_attribute("innerHTML").strip()
         except Exception as e:
             prYellow("Warning in getting jobTitle: " +str(e)[0:50])
             jobTitle = ""
         try:
-            jobCompany = self.driver.find_element(By.XPATH,"//a[contains(@class, 'ember-view t-black t-normal')]").get_attribute("innerHTML").strip()
+            jobCompany = self.driver.find_element(By.XPATH,"//div[contains(@class, 'job-details-jobs-unified-top-card__company-name')]").get_attribute("innerHTML").strip()
         except Exception as e:
             prYellow("Warning in getting jobCompany: " +str(e)[0:50])
             jobCompany = ""
         try:
-            jobLocation = self.driver.find_element(By.XPATH,"//span[contains(@class, 'bullet')]").get_attribute("innerHTML").strip()
+            jobLocation = self.driver.find_element(By.XPATH,"//span[contains(@class, 'tvm__text tvm__text--low-emphasis')]").get_attribute("innerHTML").strip()
         except Exception as e:
             prYellow("Warning in getting jobLocation: " +str(e)[0:50])
             jobLocation = ""
         try:
-            jobWOrkPlace = self.driver.find_element(By.XPATH,"//span[contains(@class, 'workplace-type')]").get_attribute("innerHTML").strip()
+            jobWOrkPlace = self.driver.find_element(By.XPATH,"//span[contains(@class, 'job-details-jobs-unified-top-card__job-insight-view-model-secondary')]").get_attribute("innerHTML").strip()
         except Exception as e:
             prYellow("Warning in getting jobWorkPlace: " +str(e)[0:50])
             jobWOrkPlace = ""
         try:
-            jobPostedDate = self.driver.find_element(By.XPATH,"//span[contains(@class, 'posted-date')]").get_attribute("innerHTML").strip()
+            jobPostedDate = self.driver.find_element(By.XPATH,"//span[contains(@class, 'tvm__text tvm__text--low-emphasis')]").get_attribute("innerHTML").strip()
         except Exception as e:
             prYellow("Warning in getting jobPostedDate: " +str(e)[0:50])
             jobPostedDate = ""
         try:
-            jobApplications= self.driver.find_element(By.XPATH,"//span[contains(@class, 'applicant-count')]").get_attribute("innerHTML").strip()
+            jobApplications= self.driver.find_element(By.XPATH,"//span[contains(@class, 'tvm__text tvm__text--low-emphasis')]").get_attribute("innerHTML").strip()
         except Exception as e:
             prYellow("Warning in getting jobApplications: " +str(e)[0:50])
             jobApplications = ""
@@ -197,8 +199,7 @@ class Linkedin:
 
     def easyApplyButton(self):
         try:
-            button = self.driver.find_element(By.XPATH,
-                '//button[contains(@class, "jobs-apply-button")]')
+            button = self.driver.find_element(By.CSS_SELECTOR, ".jobs-apply-button--top-card")
             EasyApplyButton = button
         except: 
             EasyApplyButton = False
@@ -239,6 +240,7 @@ class Linkedin:
 start = time.time()
 while True:
     try:
+        print("Starting program")
         Linkedin().linkJobApply()
     except Exception as e:
         prRed("Error in main: " +str(e))
